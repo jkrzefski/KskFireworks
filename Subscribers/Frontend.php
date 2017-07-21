@@ -5,6 +5,7 @@ namespace KskFireworks\Subscribers;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_Action;
 use Enlight_Event_EventArgs;
+use Shopware\Components\Theme\LessDefinition;
 
 /**
  * Class Frontend
@@ -32,8 +33,20 @@ class Frontend implements SubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
+            'Theme_Compiler_Collect_Plugin_Less' => 'addLess',
             'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'addTemplateDir',
         ];
+    }
+
+    /**
+     * @param Enlight_Event_EventArgs $args
+     * @return LessDefinition
+     */
+    public function addLess(Enlight_Event_EventArgs $args)
+    {
+        return new LessDefinition([], [implode(DIRECTORY_SEPARATOR, [
+            $this->pluginDir, 'Resources', 'views', 'frontend', '_public', 'src', 'less', 'all.less'
+        ])]);
     }
 
     /**
