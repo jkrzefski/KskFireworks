@@ -2,6 +2,7 @@
 
 namespace KskFireworks\Subscribers;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Enlight\Event\SubscriberInterface;
 use Enlight_Controller_Action;
 use Enlight_Event_EventArgs;
@@ -34,6 +35,7 @@ class Frontend implements SubscriberInterface
     {
         return [
             'Theme_Compiler_Collect_Plugin_Less' => 'addLess',
+            'Theme_Compiler_Collect_Plugin_Javascript' => 'addJavascript',
             'Enlight_Controller_Action_PostDispatchSecure_Frontend' => 'addTemplateDir',
         ];
     }
@@ -46,6 +48,17 @@ class Frontend implements SubscriberInterface
     {
         return new LessDefinition([], [implode(DIRECTORY_SEPARATOR, [
             $this->pluginDir, 'Resources', 'views', 'frontend', '_public', 'src', 'less', 'all.less'
+        ])]);
+    }
+
+    /**
+     * @param Enlight_Event_EventArgs $args
+     * @return ArrayCollection
+     */
+    public function addJavascript(Enlight_Event_EventArgs $args)
+    {
+        return new ArrayCollection([implode(DIRECTORY_SEPARATOR, [
+            $this->pluginDir, 'Resources', 'views', 'frontend', '_public', 'src', 'js', 'canvas-fireworks-v2.js'
         ])]);
     }
 
